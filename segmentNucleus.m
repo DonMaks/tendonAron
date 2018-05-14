@@ -2,20 +2,21 @@ clear all;
 mfilepath = fileparts(which(mfilename));
 addpath(fullfile(mfilepath, 'functions'));
 
-zProjectionRange = 2;
-constant_threshold = 0.25;
+zProjectionRange = 2; %the number of images around the sharpest detected image to use for segmentation
+constant_threshold = 0.25; %threshold for binarization
+sharpness_threshold = 0.8; %the threshold used for detection of the sharpest image
 
-folder = 'P:\Aron-seg\8\'; %folder containing your .png images
+folder = 'P:\Aron-seg\2\'; %folder containing your .png images
 
 stack = loadData(folder);
 
 [cropped_stack, shift] = cropStack(stack);
 
-[~, sharp_index] = sharpestImage(cropped_stack);
+[~, sharp_index] = sharpestImage(cropped_stack, sharpness_threshold);
 
-if sharp_index-n < 1
+if sharp_index-zProjectionRange < 1
     sharp_stack = cropped_stack(:,:,1:sharp_index+zProjectionRange);
-elseif sharp_index+n > size(cropped_stack, 3)
+elseif sharp_index+zProjectionRange > size(cropped_stack, 3)
     sharp_stack = cropped_stack(:, :, sharp_index-zProjectionRange:end);
 else
     sharp_stack = cropped_stack(:,:,sharp_index-zProjectionRange:sharp_index+zProjectionRange);

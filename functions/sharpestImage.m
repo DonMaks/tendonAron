@@ -1,11 +1,8 @@
-function [sharpness, maxIndex] = sharpestImage(stack)
-
+function [sharpness, maxIndex] = sharpestImage(stack, threshold)
 sharpness = zeros(size(stack, 3), 1);
-threshold = 0.8;
-method = 'Canny';
 
 for i = 1:size(stack,3)
-    edge_image = edge(stack(:,:,i), method, threshold);
+    edge_image = edge(stack(:,:,i), 'Canny', threshold);
     sharpness(i) = sum(edge_image(:));
 end
 
