@@ -8,5 +8,5 @@ function stack = loadData(directory)
         img = imread(fullfile(directory, files(i).name));
         stack(:,:,i) = img;
     end
-    stack = mat2gray(stack, [0 255]);
+    stack = mat2gray(stack);
 end
