@@ -5,7 +5,14 @@ function [sharpness, maxIndex] = sharpestImageByVariance(stack)
 %   sharpness of the nucleus is of interest the border regions are excluded
 %   from the analysis by applying a dilated mask of the thresholded
 %   nucleus (mask_dil) before summation.
-mask = imbinarize(stack);
+
+[counts, ~] = imhist(stack(:));
+otsu_threshold = otsuthresh(counts);
+mask = zeros(size(stack), 'logical');
+for i = 1:size(stack, 3)
+    mask(:,:,i) = imbinarize(stack(:,:,i), otsu_threshold);
+end
+
 mask = getLargestCc(mask);
 mask_dil = imdilate(mask, strel('disk', 7));
 sharpness = zeros(size(stack, 3), 1);
