@@ -8,7 +8,7 @@ function [sharpness, maxIndex] = sharpestImageByGradientRing(stack)
 %   the tophat transform of the image is first subtracted.
 [counts, ~] = imhist(stack(:));
 otsu_threshold = otsuthresh(counts);
-template_mask = imbinarize(stack(:, :, size(stack, 3)/2), otsu_threshold);
+template_mask = imbinarize(stack(:, :, round(size(stack, 3)/2)), otsu_threshold);
 template_mask = getLargestCc(template_mask);
 template_ring = bwperim(template_mask);
 template_ring_dil = imdilate(template_ring, strel('disk', 5));
